@@ -25,6 +25,18 @@ interface CalendarEvent {
 const ProjectPlanner: React.FC = () => {
   const [selectedTask, setSelectedTask] = useState<Task | null>(null);
   const [showModal, setShowModal] = useState(false);
+  const [sidebarOpen, setSidebarOpen] = useState(false);
+  const [visibleTeams, setVisibleTeams] = useState<{[key: string]: boolean}>({
+    'FE팀': true,
+    'UXUI팀': true,
+    'PM팀': true,
+    'AIML팀': true,
+    'BE/DE팀 - 크롤링 & 라벨링': true,
+    'BE/DE팀 - Service_v1 개발': true,
+    'Service_v1': true,
+    '휴일': true,
+    '동접팀': true
+  });
 
   const getAllTasks = useCallback((): Task[] => {
     const allTasks: Task[] = [];
@@ -84,6 +96,9 @@ const ProjectPlanner: React.FC = () => {
     };
     
     allTasks.forEach(task => {
+      // 팀별 필터링 적용
+      if (!visibleTeams[task.assignee]) return;
+      
       const teamColor = getColor(task.assignee);
       
       if (task.start_date === task.end_date) {
@@ -121,7 +136,7 @@ const ProjectPlanner: React.FC = () => {
     });
 
     return events;
-  }, [allTasks]);
+  }, [allTasks, visibleTeams]);
 
   const getTeamColor = useCallback((teamName: string): string => {
     const colorMap: { [key: string]: string } = {
@@ -166,55 +181,97 @@ const ProjectPlanner: React.FC = () => {
     setSelectedTask(null);
   }, []);
 
+  const toggleTeamVisibility = useCallback((teamName: string) => {
+    setVisibleTeams(prev => ({
+      ...prev,
+      [teamName]: !prev[teamName]
+    }));
+  }, []);
+
+  const toggleSidebar = useCallback(() => {
+    setSidebarOpen(prev => !prev);
+  }, []);
+
+  const selectAllTeams = useCallback(() => {
+    setVisibleTeams(prev => {
+      const newState: {[key: string]: boolean} = {};
+      Object.keys(prev).forEach(team => {
+        newState[team] = true;
+      });
+      return newState;
+    });
+  }, []);
+
+  const deselectAllTeams = useCallback(() => {
+    setVisibleTeams(prev => {
+      const newState: {[key: string]: boolean} = {};
+      Object.keys(prev).forEach(team => {
+        newState[team] = false;
+      });
+      return newState;
+    });
+  }, []);
+
   return (
     <div className="project-planner">
-      {/* Header */}
-      <div className="header">
-        <div className="header-content">
-          <h1>동접 프로젝트 플래너</h1>
-        </div>
-      </div>
+      {/* Mobile Sidebar Toggle Button */}
+      <button className="sidebar-toggle" onClick={toggleSidebar}>
+        <span className="hamburger"></span>
+        <span className="hamburger"></span>
+        <span className="hamburger"></span>
+      </button>
 
-
-      {/* Calendar */}
-      <div className="calendar-container">
-        <div className="calendar-header">
-          <h2>프로젝트 일정</h2>
-        </div>
-        <FullCalendar
-          plugins={[dayGridPlugin, interactionPlugin]}
-          initialView="dayGridMonth"
-          locale="ko"
-          firstDay={1}
-          headerToolbar={{
-            left: 'prev,next today',
-            center: 'title',
-            right: 'dayGridMonth,listWeek'
-          }}
-          height="auto"
-          aspectRatio={1.35}
-          events={getCalendarEvents()}
-          eventClick={handleEventClick}
-          validRange={{
-            start: '2025-08-01',
-            end: '2025-12-31'
-          }}
-        />
-      </div>
-
-      {/* Legend */}
-      <div className="legend">
-        <h3>팀별 범례</h3>
-        <div className="legend-items">
-          {scheduleData.teams.map(team => (
-            <div key={team.name} className="legend-item">
-              <span 
-                className={`legend-color ${getTeamClass(team.name)}`}
-                style={{ backgroundColor: getTeamColor(team.name) }}
-              ></span>
-              <span>{team.name}</span>
+      <div className="main-layout">
+        {/* Sidebar */}
+        <div className={`sidebar ${sidebarOpen ? 'sidebar-open' : ''}`}>
+          <div className="sidebar-section">
+            <h3>캘린더</h3>
+            <button className="sidebar-close" onClick={toggleSidebar}>×</button>
+            <div className="calendar-controls">
+              <button className="control-btn select-all" onClick={selectAllTeams}>모두선택</button>
+              <button className="control-btn deselect-all" onClick={deselectAllTeams}>모두해제</button>
             </div>
-          ))}
+            <div className="calendar-list">
+              {Object.keys(visibleTeams).map(teamName => (
+                <div key={teamName} className="calendar-item">
+                  <label className="calendar-checkbox">
+                    <input
+                      type="checkbox"
+                      checked={visibleTeams[teamName]}
+                      onChange={() => toggleTeamVisibility(teamName)}
+                    />
+                    <span className="calendar-color" style={{backgroundColor: getTeamColor(teamName)}}></span>
+                    <span className="calendar-name">{teamName}</span>
+                  </label>
+                </div>
+              ))}
+            </div>
+          </div>
+        </div>
+
+        {/* Main Calendar Area */}
+        <div className="main-content">
+          <div className="calendar-container">
+            <FullCalendar
+              plugins={[dayGridPlugin, interactionPlugin]}
+              initialView="dayGridMonth"
+              locale="ko"
+              firstDay={1}
+              headerToolbar={{
+                left: 'prev,next today',
+                center: 'title',
+                right: ''
+              }}
+              height={800}
+              aspectRatio={1.2}
+              events={getCalendarEvents()}
+              eventClick={handleEventClick}
+              validRange={{
+                start: '2025-08-01',
+                end: '2025-12-31'
+              }}
+            />
+          </div>
         </div>
       </div>
 

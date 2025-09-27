@@ -3,11 +3,11 @@
   font-family: 'Inter', 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
   line-height: 1.6;
   color: #1a1a1a;
-  background: linear-gradient(135deg, #1e3c72 0%, #2a5298 25%, #4a90e2 50%, #87ceeb 75%, #b0e0e6 100%);
+  background: linear-gradient(135deg, #0f1f3f 0%, #1a2f5f 25%, #1e3a6f 50%, #2a4a7f 75%, #3a5a8f 100%);
   background-size: 400% 400%;
   animation: waveShift 20s ease infinite;
   min-height: 100vh;
-  padding: 20px;
+  padding: 15px;
   position: relative;
 }
 
@@ -43,6 +43,406 @@
 .project-planner > * {
   position: relative;
   z-index: 2;
+}
+
+/* 모바일 사이드바 토글 버튼 */
+.sidebar-toggle {
+  display: none;
+  position: fixed;
+  top: 20px;
+  left: 20px;
+  z-index: 1000;
+  background: rgba(255, 255, 255, 0.1);
+  backdrop-filter: blur(20px);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  border-radius: 12px;
+  padding: 12px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+}
+
+.sidebar-toggle:hover {
+  background: rgba(255, 255, 255, 0.15);
+  transform: scale(1.05);
+}
+
+.hamburger {
+  display: block;
+  width: 20px;
+  height: 2px;
+  background: rgba(255, 255, 255, 0.9);
+  margin: 4px 0;
+  transition: all 0.3s ease;
+  border-radius: 1px;
+}
+
+/* 메인 레이아웃 - 두 컬럼 */
+.main-layout {
+  display: flex;
+  gap: 20px;
+  height: calc(100vh - 30px);
+  max-width: 1400px;
+  margin: 0 auto;
+}
+
+/* 사이드바 */
+.sidebar {
+  width: 220px;
+  background: rgba(255, 255, 255, 0.08);
+  backdrop-filter: blur(20px);
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  border-radius: 16px;
+  padding: 15px;
+  overflow-y: auto;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+  transition: all 0.3s ease;
+}
+
+.sidebar-close {
+  display: none;
+  position: absolute;
+  top: 15px;
+  right: 15px;
+  background: rgba(255, 255, 255, 0.1);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  border-radius: 50%;
+  width: 30px;
+  height: 30px;
+  color: rgba(255, 255, 255, 0.9);
+  font-size: 18px;
+  font-weight: bold;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  z-index: 10;
+}
+
+.sidebar-close:hover {
+  background: rgba(255, 255, 255, 0.2);
+  transform: scale(1.1);
+}
+
+.sidebar-section {
+  position: relative;
+  margin-bottom: 20px;
+}
+
+.calendar-controls {
+  display: flex;
+  gap: 8px;
+  margin-bottom: 15px;
+}
+
+.control-btn {
+  flex: 1;
+  padding: 6px 8px;
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  border-radius: 6px;
+  background: rgba(255, 255, 255, 0.05);
+  color: rgba(255, 255, 255, 0.85);
+  font-size: 0.75rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  text-align: center;
+}
+
+.control-btn:hover {
+  background: rgba(255, 255, 255, 0.1);
+  border-color: rgba(255, 255, 255, 0.3);
+  transform: translateY(-1px);
+}
+
+.control-btn.select-all {
+  background: rgba(74, 144, 226, 0.2);
+  border-color: rgba(74, 144, 226, 0.4);
+  color: rgba(255, 255, 255, 0.9);
+}
+
+.control-btn.select-all:hover {
+  background: rgba(74, 144, 226, 0.3);
+  border-color: rgba(74, 144, 226, 0.6);
+}
+
+.control-btn.deselect-all {
+  background: rgba(255, 107, 107, 0.2);
+  border-color: rgba(255, 107, 107, 0.4);
+  color: rgba(255, 255, 255, 0.9);
+}
+
+.control-btn.deselect-all:hover {
+  background: rgba(255, 107, 107, 0.3);
+  border-color: rgba(255, 107, 107, 0.6);
+}
+
+
+.sidebar-section h3 {
+  color: rgba(255, 255, 255, 0.9);
+  font-size: 0.9rem;
+  font-weight: 600;
+  margin-bottom: 12px;
+  text-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+}
+
+.calendar-list {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.calendar-item {
+  display: flex;
+  align-items: center;
+}
+
+.calendar-checkbox {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  cursor: pointer;
+  padding: 4px 6px;
+  border-radius: 6px;
+  transition: background-color 0.2s ease;
+  width: 100%;
+}
+
+.calendar-checkbox:hover {
+  background: rgba(255, 255, 255, 0.05);
+}
+
+.calendar-checkbox input[type="checkbox"] {
+  width: 14px;
+  height: 14px;
+  accent-color: #4a90e2;
+  cursor: pointer;
+}
+
+.calendar-color {
+  width: 10px;
+  height: 10px;
+  border-radius: 2px;
+  border: 1px solid rgba(255, 255, 255, 0.3);
+  flex-shrink: 0;
+}
+
+.calendar-name {
+  color: rgba(255, 255, 255, 0.85);
+  font-size: 0.8rem;
+  font-weight: 500;
+  flex: 1;
+}
+
+/* 메인 컨텐츠 영역 */
+.main-content {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+}
+
+.calendar-container {
+  background: rgba(255, 255, 255, 0.08);
+  backdrop-filter: blur(20px);
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  border-radius: 16px;
+  padding: 20px;
+  flex: 1;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+}
+
+/* 모바일 반응형 스타일 */
+@media (max-width: 768px) {
+  .sidebar-toggle {
+    display: block;
+  }
+  
+  .main-layout {
+    gap: 0;
+  }
+  
+  .sidebar {
+    position: fixed;
+    top: 0;
+    left: -100vw;
+    height: 100vh;
+    z-index: 999;
+    border-radius: 0;
+    padding: 15px;
+    width: 110px;
+    transition: left 0.3s ease;
+    overflow-x: hidden;
+  }
+  
+  .sidebar.sidebar-open {
+    left: 0;
+  }
+  
+  .sidebar-close {
+    display: block;
+    top: 10px;
+    right: 10px;
+    width: 25px;
+    height: 25px;
+    font-size: 16px;
+  }
+  
+  .main-content {
+    width: 100%;
+  }
+  
+  .calendar-container {
+    padding: 15px;
+    border-radius: 12px;
+  }
+  
+  /* 모바일 사이드바 내부 요소 조정 */
+  .sidebar-section h3 {
+    font-size: 0.8rem;
+    margin-bottom: 10px;
+  }
+  
+  .calendar-controls {
+    gap: 6px;
+    margin-bottom: 12px;
+  }
+  
+  .control-btn {
+    padding: 5px 6px;
+    font-size: 0.7rem;
+  }
+  
+  .calendar-list {
+    gap: 4px;
+  }
+  
+  .calendar-checkbox {
+    padding: 3px 4px;
+    gap: 6px;
+  }
+  
+  .calendar-checkbox input[type="checkbox"] {
+    width: 12px;
+    height: 12px;
+  }
+  
+  .calendar-color {
+    width: 8px;
+    height: 8px;
+  }
+  
+  .calendar-name {
+    font-size: 0.7rem;
+  }
+  
+  /* 사이드바 오버레이 */
+  .sidebar::before {
+    content: '';
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    background: rgba(0, 0, 0, 0.5);
+    z-index: -1;
+    opacity: 0;
+    transition: opacity 0.3s ease;
+  }
+  
+  .sidebar.sidebar-open::before {
+    opacity: 1;
+  }
+}
+
+@media (max-width: 480px) {
+  .project-planner {
+    padding: 10px;
+  }
+  
+  .sidebar {
+    width: 90px;
+    left: -100vw;
+    padding: 12px;
+  }
+  
+  .calendar-container {
+    padding: 10px;
+  }
+  
+  .sidebar-toggle {
+    top: 15px;
+    left: 15px;
+    padding: 10px;
+  }
+  
+  .hamburger {
+    width: 18px;
+    height: 2px;
+    margin: 3px 0;
+  }
+  
+  .sidebar-section h3 {
+    font-size: 0.75rem;
+    margin-bottom: 8px;
+  }
+  
+  .calendar-name {
+    font-size: 0.65rem;
+  }
+  
+  .calendar-checkbox {
+    padding: 2px 3px;
+    gap: 4px;
+  }
+  
+  .calendar-checkbox input[type="checkbox"] {
+    width: 10px;
+    height: 10px;
+  }
+  
+  .calendar-color {
+    width: 6px;
+    height: 6px;
+  }
+}
+
+/* 매우 작은 디바이스 (357px 이하) */
+@media (max-width: 360px) {
+  .sidebar {
+    left: -100vw;
+    width: 85px;
+    padding: 10px;
+  }
+  
+  .sidebar-section h3 {
+    font-size: 0.7rem;
+    margin-bottom: 6px;
+  }
+  
+  .calendar-name {
+    font-size: 0.6rem;
+  }
+  
+  .calendar-checkbox {
+    padding: 1px 2px;
+    gap: 3px;
+  }
+  
+  .calendar-checkbox input[type="checkbox"] {
+    width: 8px;
+    height: 8px;
+  }
+  
+  .calendar-color {
+    width: 5px;
+    height: 5px;
+  }
+  
+  .sidebar-close {
+    top: 8px;
+    right: 8px;
+    width: 20px;
+    height: 20px;
+    font-size: 14px;
+  }
 }
 
 @keyframes waveShift {
@@ -381,7 +781,7 @@
 .fc-daygrid-day {
   background: rgba(255, 255, 255, 0.05) !important;
   border: 1px solid rgba(255, 255, 255, 0.1) !important;
-  min-height: 120px !important;
+  min-height: 65px !important;
   transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1) !important;
 }
 
@@ -467,16 +867,16 @@
 /* 이벤트 스타일 */
 .fc-event {
   border: none !important;
-  border-radius: 8px !important;
-  padding: 4px 8px !important;
-  margin: 2px !important;
-  font-size: 0.8rem !important;
-  font-weight: 600 !important;
+  border-radius: 4px !important;
+  padding: 1px 4px !important;
+  margin: 0.5px !important;
+  font-size: 0.65rem !important;
+  font-weight: 500 !important;
   cursor: pointer !important;
   transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1) !important;
-  line-height: 1.3 !important;
+  line-height: 1.1 !important;
   backdrop-filter: blur(10px) !important;
-  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1) !important;
+  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.1) !important;
   border: 1px solid rgba(255, 255, 255, 0.2) !important;
   will-change: transform, box-shadow, filter !important;
 }
@@ -549,11 +949,12 @@
 
 /* 이벤트 제목 */
 .fc-event-title {
-  font-weight: 600 !important;
+  font-weight: 500 !important;
   white-space: nowrap !important;
   overflow: hidden !important;
   text-overflow: ellipsis !important;
-  font-size: 0.75rem !important;
+  font-size: 0.65rem !important;
+  line-height: 1.1 !important;
   cursor: inherit !important;
   pointer-events: none !important;
 }
@@ -710,12 +1111,10 @@ a.fc-event.fc-event-end.fc-event-past.fc-daygrid-event.fc-daygrid-block-event.fc
   background: rgba(255, 255, 255, 0.1);
   backdrop-filter: blur(20px);
   border: 1px solid rgba(255, 255, 255, 0.2);
-  border-radius: 24px;
-  padding: 35px;
-  margin-bottom: 30px;
-  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.1), 
-              0 8px 32px rgba(0, 0, 0, 0.05),
-              inset 0 1px 0 rgba(255, 255, 255, 0.3);
+  border-radius: 12px;
+  padding: 8px 12px;
+  margin-bottom: 10px;
+  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
   transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
@@ -728,15 +1127,15 @@ a.fc-event.fc-event-end.fc-event-past.fc-daygrid-event.fc-daygrid-block-event.fc
 
 .legend h3 {
   color: rgba(255, 255, 255, 0.9);
-  margin-bottom: 25px;
-  font-size: 1.5rem;
-  font-weight: 700;
-  text-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+  margin-bottom: 8px;
+  font-size: 0.9rem;
+  font-weight: 600;
+  text-shadow: 0 1px 5px rgba(0, 0, 0, 0.1);
 }
 
 .legend-items {
   display: flex;
-  gap: 25px;
+  gap: 8px;
   flex-wrap: wrap;
   justify-content: center;
 }
@@ -744,13 +1143,13 @@ a.fc-event.fc-event-end.fc-event-past.fc-daygrid-event.fc-daygrid-block-event.fc
 .legend-item {
   display: flex;
   align-items: center;
-  gap: 12px;
-  font-size: 0.95rem;
+  gap: 6px;
+  font-size: 0.75rem;
   color: rgba(255, 255, 255, 0.8);
   font-weight: 500;
   background: rgba(255, 255, 255, 0.05);
-  padding: 12px 16px;
-  border-radius: 12px;
+  padding: 4px 8px;
+  border-radius: 8px;
   border: 1px solid rgba(255, 255, 255, 0.1);
   transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
 }
@@ -762,11 +1161,11 @@ a.fc-event.fc-event-end.fc-event-past.fc-daygrid-event.fc-daygrid-block-event.fc
 }
 
 .legend-color {
-  width: 24px;
-  height: 24px;
-  border-radius: 8px;
-  border: 2px solid rgba(255, 255, 255, 0.3);
-  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+  width: 12px;
+  height: 12px;
+  border-radius: 6px;
+  border: 1px solid rgba(255, 255, 255, 0.3);
+  box-shadow: 0 1px 5px rgba(0, 0, 0, 0.1);
   transition: all 0.3s ease;
 }
 
@@ -1044,6 +1443,13 @@ a.fc-event.fc-event-end.fc-event-past.fc-daygrid-event.fc-daygrid-block-event.fc
 }
 
 /* 반응형 */
+@media (min-width: 1024px) {
+  .project-planner {
+    max-width: 1200px;
+    margin: 0 auto;
+  }
+}
+
 @media (max-width: 1024px) {
   .project-planner {
     padding: 15px;
