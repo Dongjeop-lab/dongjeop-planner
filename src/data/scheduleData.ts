@@ -43,7 +43,7 @@ export const scheduleData: ScheduleData = {
                     end_date: "2025-09-27",
                     priority: "high",
                     assignee: "FE팀",
-                    status: "in_progress",
+                    status: "completed",
                     notification_days: [1, 3, 7]
                 },
             ]
@@ -89,7 +89,7 @@ export const scheduleData: ScheduleData = {
                     end_date: "2025-09-27",
                     priority: "high",
                     assignee: "UXUI팀",
-                    status: "in_progress",
+                    status: "completed",
                     notification_days: [1, 3, 7]
                 },
                 {
@@ -155,7 +155,7 @@ export const scheduleData: ScheduleData = {
                     end_date: "2025-09-23",
                     priority: "high",
                     assignee: "PM팀",
-                    status: "pending",
+                    status: "completed",
                     notification_days: [1, 3, 7]
                 },
                 {
@@ -394,7 +394,7 @@ export const scheduleData: ScheduleData = {
                 },
                 {
                     id: "all_003",
-                    title: "A안 소프트 릴리즈 + 채널홍보",
+                    title: "Service_v1 소프트 릴리즈 + 채널홍보",
                     start_date: "2025-10-15",
                     end_date: "2025-10-15",
                     priority: "high",
@@ -429,6 +429,58 @@ export const scheduleData: ScheduleData = {
                     end_date: "2025-10-08",
                     priority: "high",
                     assignee: "Service_v1",
+                    status: "pending",
+                    notification_days: [1, 3, 7]
+                }
+            ]
+        },
+        {
+            name: "휴일",
+            period: "10/3 ~ 10/9 (7일)",
+            tasks: [
+                {
+                    id: "holiday_001",
+                    title: "추석연휴",
+                    start_date: "2025-10-03",
+                    end_date: "2025-10-09",
+                    priority: "low",
+                    assignee: "휴일",
+                    status: "pending",
+                    notification_days: []
+                }
+            ]
+        },
+        {
+            name: "동접팀",
+            period: "11/3 ~ 12/13 (6주)",
+            tasks: [
+                {
+                    id: "dongjeop_001",
+                    title: "최종 안정화·문서화",
+                    start_date: "2025-11-03",
+                    end_date: "2025-11-23",
+                    priority: "high",
+                    assignee: "동접팀",
+                    status: "pending",
+                    notification_days: [1, 3, 7]
+                },
+                {
+                    id: "dongjeop_002",
+                    title: "최종 점검·성과 준비",
+                    start_date: "2025-11-24",
+                    end_date: "2025-12-07",
+                    priority: "high",
+                    assignee: "동접팀",
+                    status: "pending",
+                    notification_days: [1, 3, 7]
+                },
+                {
+                    id: "dongjeop_003",
+                    title: "최종 성과 공유회",
+                    start_date: "2025-12-08",
+                    end_date: "2025-12-13",
+                    priority: "high",
+                    assignee: "동접팀",
                     status: "pending",
                     notification_days: [1, 3, 7]
                 }

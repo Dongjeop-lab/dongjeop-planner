@@ -1,9 +1,9 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useCallback } from 'react';
 import FullCalendar from '@fullcalendar/react';
 import dayGridPlugin from '@fullcalendar/daygrid';
 import interactionPlugin from '@fullcalendar/interaction';
 import { scheduleData } from '../data/scheduleData';
-import { Task, Team } from '../types';
+import { Task } from '../types';
 import './ProjectPlanner.css';
 
 interface CalendarEvent {
@@ -23,56 +23,77 @@ interface CalendarEvent {
 }
 
 const ProjectPlanner: React.FC = () => {
-  const [filteredTasks, setFilteredTasks] = useState<Task[]>([]);
-  const [searchTerm, setSearchTerm] = useState('');
-  const [teamFilter, setTeamFilter] = useState('');
-  const [priorityFilter, setPriorityFilter] = useState('');
-  const [statusFilter, setStatusFilter] = useState('');
   const [selectedTask, setSelectedTask] = useState<Task | null>(null);
   const [showModal, setShowModal] = useState(false);
 
-  useEffect(() => {
-    filterTasks();
-  }, [searchTerm, teamFilter, priorityFilter, statusFilter]);
-
-  const getAllTasks = (): Task[] => {
+  const getAllTasks = useCallback((): Task[] => {
     const allTasks: Task[] = [];
+    const currentDate = new Date();
+    
     scheduleData.teams.forEach(team => {
       team.tasks.forEach(task => {
+        // 현재 날짜 기준으로 상태 자동 계산
+        const startDate = new Date(task.start_date);
+        const endDate = new Date(task.end_date);
+        
+        let autoStatus = task.status;
+        
+        // 현재 날짜가 시작일 이전이면 pending
+        if (currentDate < startDate) {
+          autoStatus = 'pending';
+        }
+        // 현재 날짜가 마감일 이후면 completed
+        else if (currentDate > endDate) {
+          autoStatus = 'completed';
+        }
+        // 시작일과 마감일 사이면 in_progress (단, 이미 completed인 것은 유지)
+        else if (task.status !== 'completed') {
+          autoStatus = 'in_progress';
+        }
+        
         allTasks.push({
           ...task,
-          team: team.name
+          team: team.name,
+          status: autoStatus
         } as Task & { team: string });
       });
     });
     return allTasks;
-  };
+  }, []);
 
-  const filterTasks = () => {
-    const allTasks = getAllTasks();
-    const filtered = allTasks.filter(task => {
-      const matchesSearch = task.title.toLowerCase().includes(searchTerm.toLowerCase());
-      const matchesTeam = !teamFilter || task.assignee === teamFilter;
-      const matchesPriority = !priorityFilter || task.priority === priorityFilter;
-      const matchesStatus = !statusFilter || task.status === statusFilter;
+  const allTasks = getAllTasks();
 
-      return matchesSearch && matchesTeam && matchesPriority && matchesStatus;
-    });
-    setFilteredTasks(filtered);
-  };
-
-  const getCalendarEvents = (): CalendarEvent[] => {
+  const getCalendarEvents = useCallback((): CalendarEvent[] => {
     const events: CalendarEvent[] = [];
     
-    filteredTasks.forEach(task => {
+    // 색상 맵을 함수 내부에서 정의
+    const colorMap: { [key: string]: string } = {
+      'FE팀': '#FF6B6B',
+      'UXUI팀': '#4ECDC4',
+      'PM팀': '#45B7D1',
+      'AIML팀': '#96CEB4',
+      'BE/DE팀 - 크롤링 & 라벨링': '#F4D03F',
+      'BE/DE팀 - Service_v1 개발': '#DDA0DD',
+      'Service_v1': '#B0BEC5',
+      '휴일': '#FFB6C1',
+      '동접팀': '#FF8C00'
+    };
+    
+    const getColor = (teamName: string): string => {
+      return colorMap[teamName] || '#95a5a6';
+    };
+    
+    allTasks.forEach(task => {
+      const teamColor = getColor(task.assignee);
+      
       if (task.start_date === task.end_date) {
         events.push({
           id: task.id,
           title: task.title,
           start: task.start_date,
           allDay: true,
-          backgroundColor: getTeamColor(task.assignee),
-          borderColor: getTeamColor(task.assignee),
+          backgroundColor: teamColor,
+          borderColor: teamColor,
           extendedProps: {
             team: task.assignee,
             priority: task.priority,
@@ -87,8 +108,8 @@ const ProjectPlanner: React.FC = () => {
           start: task.start_date,
           end: new Date(new Date(task.end_date).getTime() + 24 * 60 * 60 * 1000).toISOString().split('T')[0],
           allDay: true,
-          backgroundColor: getTeamColor(task.assignee),
-          borderColor: getTeamColor(task.assignee),
+          backgroundColor: teamColor,
+          borderColor: teamColor,
           extendedProps: {
             team: task.assignee,
             priority: task.priority,
@@ -100,9 +121,9 @@ const ProjectPlanner: React.FC = () => {
     });
 
     return events;
-  };
+  }, [allTasks]);
 
-  const getTeamColor = (teamName: string): string => {
+  const getTeamColor = useCallback((teamName: string): string => {
     const colorMap: { [key: string]: string } = {
       'FE팀': '#FF6B6B',
       'UXUI팀': '#4ECDC4',
@@ -110,12 +131,14 @@ const ProjectPlanner: React.FC = () => {
       'AIML팀': '#96CEB4',
       'BE/DE팀 - 크롤링 & 라벨링': '#F4D03F',
       'BE/DE팀 - Service_v1 개발': '#DDA0DD',
-      'Service_v1': '#B0BEC5'
+      'Service_v1': '#B0BEC5',
+      '휴일': '#FFB6C1',
+      '동접팀': '#FF8C00'
     };
     return colorMap[teamName] || '#95a5a6';
-  };
+  }, []);
 
-  const getTeamClass = (teamName: string): string => {
+  const getTeamClass = useCallback((teamName: string): string => {
     const teamMap: { [key: string]: string } = {
       'FE팀': 'fe-team',
       'UXUI팀': 'uxui-team',
@@ -123,116 +146,38 @@ const ProjectPlanner: React.FC = () => {
       'AIML팀': 'aiml-team',
       'BE/DE팀 - 크롤링 & 라벨링': 'bede-crawling-team',
       'BE/DE팀 - Service_v1 개발': 'bede-service-team',
-      'Service_v1': 'all-team'
+      'Service_v1': 'all-team',
+      '휴일': 'holiday-team',
+      '동접팀': 'dongjeop-team'
     };
     return teamMap[teamName] || '';
-  };
+  }, []);
 
-  const calculateStats = () => {
-    const totalTasks = filteredTasks.length;
-    const completedTasks = filteredTasks.filter(task => task.status === 'completed').length;
-    const upcomingTasks = filteredTasks.filter(task => {
-      const endDate = new Date(task.end_date);
-      const today = new Date();
-      const diffTime = endDate.getTime() - today.getTime();
-      const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
-      return diffDays <= 7 && task.status !== 'completed';
-    }).length;
-
-    return { totalTasks, completedTasks, upcomingTasks };
-  };
-
-  const handleEventClick = (info: any) => {
+  const handleEventClick = useCallback((info: any) => {
     const task = getAllTasks().find(t => t.id === info.event.id);
     if (task) {
       setSelectedTask(task);
       setShowModal(true);
     }
-  };
+  }, [getAllTasks]);
 
-  const closeModal = () => {
+  const closeModal = useCallback(() => {
     setShowModal(false);
     setSelectedTask(null);
-  };
-
-  const stats = calculateStats();
+  }, []);
 
   return (
     <div className="project-planner">
       {/* Header */}
       <div className="header">
         <div className="header-content">
-          <h1>동접 프로젝트 플래너</h1>
-          <p>팀별 일정 관리 및 진행 상황 추적</p>
-          
-          <div className="header-stats">
-            <div className="stat-item">
-              <div className="stat-number">{stats.totalTasks}</div>
-              <div className="stat-label">전체 작업</div>
-            </div>
-            <div className="stat-item">
-              <div className="stat-number">{stats.completedTasks}</div>
-              <div className="stat-label">완료된 작업</div>
-            </div>
-            <div className="stat-item">
-              <div className="stat-number">{stats.upcomingTasks}</div>
-              <div className="stat-label">마감 임박</div>
-            </div>
+          <div className="header-banner">
+            <img src="/dongjeop_dog.png" alt="동접 강아지" className="banner-image" />
+            <h1>동접 프로젝트 플래너</h1>
           </div>
         </div>
       </div>
 
-      {/* Filters */}
-      <div className="filters">
-        <div className="filter-group">
-          <input
-            type="text"
-            placeholder="작업 검색..."
-            value={searchTerm}
-            onChange={(e) => setSearchTerm(e.target.value)}
-            className="search-input"
-          />
-        </div>
-        
-        <div className="filter-group">
-          <select
-            value={teamFilter}
-            onChange={(e) => setTeamFilter(e.target.value)}
-            className="filter-select"
-          >
-            <option value="">모든 팀</option>
-            {scheduleData.teams.map(team => (
-              <option key={team.name} value={team.name}>{team.name}</option>
-            ))}
-          </select>
-        </div>
-
-        <div className="filter-group">
-          <select
-            value={priorityFilter}
-            onChange={(e) => setPriorityFilter(e.target.value)}
-            className="filter-select"
-          >
-            <option value="">모든 우선순위</option>
-            <option value="high">높음</option>
-            <option value="medium">보통</option>
-            <option value="low">낮음</option>
-          </select>
-        </div>
-
-        <div className="filter-group">
-          <select
-            value={statusFilter}
-            onChange={(e) => setStatusFilter(e.target.value)}
-            className="filter-select"
-          >
-            <option value="">모든 상태</option>
-            <option value="pending">대기</option>
-            <option value="in_progress">진행중</option>
-            <option value="completed">완료</option>
-          </select>
-        </div>
-      </div>
 
       {/* Calendar */}
       <div className="calendar-container">
@@ -255,7 +200,7 @@ const ProjectPlanner: React.FC = () => {
           eventClick={handleEventClick}
           validRange={{
             start: '2025-08-01',
-            end: '2025-11-30'
+            end: '2025-12-31'
           }}
         />
       </div>

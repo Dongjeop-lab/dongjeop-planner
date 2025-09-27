@@ -7,6 +7,7 @@ export interface Task {
   assignee: string;
   status: 'pending' | 'in_progress' | 'completed';
   notification_days: number[];
+  team?: string;
 }
 
 export interface Team {
