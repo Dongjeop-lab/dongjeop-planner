@@ -171,10 +171,7 @@ const ProjectPlanner: React.FC = () => {
       {/* Header */}
       <div className="header">
         <div className="header-content">
-          <div className="header-banner">
-            <img src="/dongjeop_dog.png" alt="동접 강아지" className="banner-image" />
-            <h1>동접 프로젝트 플래너</h1>
-          </div>
+          <h1>동접 프로젝트 플래너</h1>
         </div>
       </div>
 
