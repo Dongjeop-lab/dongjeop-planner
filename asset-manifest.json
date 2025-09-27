@@ -1,15 +1,15 @@
 {
   "files": {
-    "main.css": "/dongjeop-planner/static/css/main.03669626.css",
-    "main.js": "/dongjeop-planner/static/js/main.ff3ddee2.js",
+    "main.css": "/dongjeop-planner/static/css/main.bb1fbd41.css",
+    "main.js": "/dongjeop-planner/static/js/main.17567170.js",
     "static/js/453.fdf2feb4.chunk.js": "/dongjeop-planner/static/js/453.fdf2feb4.chunk.js",
     "index.html": "/dongjeop-planner/index.html",
-    "main.03669626.css.map": "/dongjeop-planner/static/css/main.03669626.css.map",
-    "main.ff3ddee2.js.map": "/dongjeop-planner/static/js/main.ff3ddee2.js.map",
+    "main.bb1fbd41.css.map": "/dongjeop-planner/static/css/main.bb1fbd41.css.map",
+    "main.17567170.js.map": "/dongjeop-planner/static/js/main.17567170.js.map",
     "453.fdf2feb4.chunk.js.map": "/dongjeop-planner/static/js/453.fdf2feb4.chunk.js.map"
   },
   "entrypoints": [
-    "static/css/main.03669626.css",
-    "static/js/main.ff3ddee2.js"
+    "static/css/main.bb1fbd41.css",
+    "static/js/main.17567170.js"
   ]
 }
