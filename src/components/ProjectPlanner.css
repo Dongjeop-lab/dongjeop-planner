@@ -928,6 +928,11 @@
   color: #333 !important;
 }
 
+.fc-event.service-v2-team {
+  background: linear-gradient(135deg, #9B59B6, #8E44AD) !important;
+  color: white !important;
+}
+
 .fc-event.dongjeop-team {
   background: linear-gradient(135deg, #FF8C00, #FF7F00) !important;
   color: white !important;

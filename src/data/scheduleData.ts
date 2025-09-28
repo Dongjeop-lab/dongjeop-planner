@@ -84,9 +84,9 @@ export const scheduleData: ScheduleData = {
                 },
                 {
                     id: "ux_007",
-                    title: "A안 디자인 진행",
+                    title: "A안 디자인 진행 + B안 디자인",
                     start_date: "2025-09-24",
-                    end_date: "2025-09-27",
+                    end_date: "2025-09-30",
                     priority: "high",
                     assignee: "UXUI팀",
                     status: "completed",
@@ -95,7 +95,7 @@ export const scheduleData: ScheduleData = {
                 {
                     id: "ux_008",
                     title: "B안 인터뷰 진행",
-                    start_date: "2025-09-29",
+                    start_date: "2025-10-01",
                     end_date: "2025-10-03",
                     priority: "medium",
                     assignee: "UXUI팀",
@@ -451,14 +451,30 @@ export const scheduleData: ScheduleData = {
             ]
         },
         {
+            name: "Service_v2",
+            period: "10/20 ~ 10/26 (1주)",
+            tasks: [
+                {
+                    id: "service_v2_001",
+                    title: "Service_v2 논의",
+                    start_date: "2025-10-20",
+                    end_date: "2025-10-26",
+                    priority: "high",
+                    assignee: "Service_v2",
+                    status: "pending",
+                    notification_days: [1, 3, 7]
+                }
+            ]
+        },
+        {
             name: "동접팀",
             period: "11/3 ~ 12/13 (6주)",
             tasks: [
                 {
                     id: "dongjeop_001",
-                    title: "최종 안정화·문서화",
-                    start_date: "2025-11-03",
-                    end_date: "2025-11-23",
+                    title: "Service_v1 최종 안정화·문서화 ex) api 명세, 코드 정리 등등",
+                    start_date: "2025-10-20",
+                    end_date: "2025-11-02",
                     priority: "high",
                     assignee: "동접팀",
                     status: "pending",
@@ -467,7 +483,7 @@ export const scheduleData: ScheduleData = {
                 {
                     id: "dongjeop_002",
                     title: "최종 점검·성과 준비",
-                    start_date: "2025-11-24",
+                    start_date: "2025-12-01",
                     end_date: "2025-12-07",
                     priority: "high",
                     assignee: "동접팀",
