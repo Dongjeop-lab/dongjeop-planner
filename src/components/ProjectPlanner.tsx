@@ -88,6 +88,7 @@ const ProjectPlanner: React.FC = () => {
       'BE/DE팀 - 크롤링 & 라벨링': '#F4D03F',
       'BE/DE팀 - Service_v1 개발': '#DDA0DD',
       'Service_v1': '#B0BEC5',
+      'Service_v2': '#9B59B6',
       '휴일': '#FFB6C1',
       '동접팀': '#FF8C00'
     };
