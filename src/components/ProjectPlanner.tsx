@@ -34,6 +34,7 @@ const ProjectPlanner: React.FC = () => {
     'BE/DE팀 - 크롤링 & 라벨링': true,
     'BE/DE팀 - Service_v1 개발': true,
     'Service_v1': true,
+    'Service_v2': true,
     '휴일': true,
     '동접팀': true
   });
